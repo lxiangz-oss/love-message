@@ -2,7 +2,8 @@ import smtplib
 import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from datetime import date
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
 import requests
 import anthropic
 
@@ -160,7 +161,7 @@ def build_html(today, days_together, days_until_meeting, durham, boston, quote):
 
 
 def main():
-    today = date.today()
+    today = datetime.now(ZoneInfo("America/New_York")).date()
     days_together = (today - ANNIVERSARY).days
     days_until_meeting = (NEXT_MEETING - today).days
 
