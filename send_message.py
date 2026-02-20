@@ -13,33 +13,39 @@ ANNIVERSARY = date(2021, 12, 25)       # 纪念日
 NEXT_MEETING = date(2026, 3, 10)       # 下次见面日期，改这里
 
 # --- API Keys（从 GitHub Secrets 环境变量读取）---
-QWEATHER_KEY = os.environ["QWEATHER_KEY"]
 CLAUDE_KEY = os.environ["CLAUDE_KEY"]
 GMAIL_PASSWORD = os.environ["GMAIL_PASSWORD"]
 
+# WMO 天气代码 → 中文描述
+WMO_CODE = {
+    0: "晴", 1: "晴", 2: "多云", 3: "阴",
+    45: "雾", 48: "雾",
+    51: "小毛毛雨", 53: "毛毛雨", 55: "大毛毛雨",
+    61: "小雨", 63: "中雨", 65: "大雨",
+    71: "小雪", 73: "中雪", 75: "大雪", 77: "雪粒",
+    80: "阵雨", 81: "中阵雨", 82: "强阵雨",
+    85: "阵雪", 86: "强阵雪",
+    95: "雷阵雨", 96: "雷雨夹冰雹", 99: "强雷雨夹冰雹",
+}
 
-def get_weather(city_name, location):
-    """获取城市实时天气（和风天气 API）"""
-    url = "https://devapi.qweather.com/v7/weather/now"
+
+def get_weather(city_name, lat, lon):
+    """获取城市实时天气（Open-Meteo，无需 API Key）"""
+    url = "https://api.open-meteo.com/v1/forecast"
     params = {
-        "location": location,
-        "key": QWEATHER_KEY,
-        "lang": "zh",
-        "unit": "m",
+        "latitude": lat,
+        "longitude": lon,
+        "current": "temperature_2m,apparent_temperature,weather_code",
     }
     try:
         resp = requests.get(url, params=params, timeout=10)
         data = resp.json()
-        print(f"天气 API 响应 {city_name}: {data}")
-        if data.get("code") == "200":
-            now = data["now"]
-            return {
-                "temp": now["temp"],
-                "text": now["text"],
-                "feelsLike": now["feelsLike"],
-            }
-        else:
-            print(f"天气 API 错误码 {city_name}: {data.get('code')}")
+        current = data["current"]
+        return {
+            "temp": round(current["temperature_2m"], 1),
+            "feelsLike": round(current["apparent_temperature"], 1),
+            "text": WMO_CODE.get(current["weather_code"], "未知"),
+        }
     except Exception as e:
         print(f"天气获取失败 {city_name}: {e}")
     return {"temp": "??", "text": "暂无数据", "feelsLike": "??"}
@@ -160,10 +166,8 @@ def main():
 
     print(f"📅 今天: {today} | 在一起: {days_together}天 | 距离见面: {days_until_meeting}天")
 
-    # Durham, NC: lon=-78.8986, lat=35.9940
-    # Boston, MA: lon=-71.0589, lat=42.3601
-    durham = get_weather("Durham", "-78.8986,35.9940")
-    boston = get_weather("Boston", "-71.0589,42.3601")
+    durham = get_weather("Durham", 35.9940, -78.8986)
+    boston = get_weather("Boston", 42.3601, -71.0589)
     print(f"🌤 Durham: {durham['temp']}°C {durham['text']}")
     print(f"🌤 Boston: {boston['temp']}°C {boston['text']}")
 
