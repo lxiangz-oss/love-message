@@ -30,13 +30,16 @@ def get_weather(city_name, location):
     try:
         resp = requests.get(url, params=params, timeout=10)
         data = resp.json()
-        if data["code"] == "200":
+        print(f"天气 API 响应 {city_name}: {data}")
+        if data.get("code") == "200":
             now = data["now"]
             return {
                 "temp": now["temp"],
                 "text": now["text"],
                 "feelsLike": now["feelsLike"],
             }
+        else:
+            print(f"天气 API 错误码 {city_name}: {data.get('code')}")
     except Exception as e:
         print(f"天气获取失败 {city_name}: {e}")
     return {"temp": "??", "text": "暂无数据", "feelsLike": "??"}
