@@ -28,7 +28,7 @@ Add these repository secrets in:
 - `GMAIL_PASSWORD`
 - `CLAUDE_KEY`
 
-Then manually run the `每日情书` workflow once to verify.
+Then manually run the workflow once to verify.
 
 ## Security
 
