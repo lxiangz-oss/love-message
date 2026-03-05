@@ -7,15 +7,23 @@ from zoneinfo import ZoneInfo
 import requests
 import anthropic
 
+
+def read_required_env(var_name):
+    value = os.getenv(var_name, "").strip()
+    if not value or value.startswith("<") or value.startswith("YOUR_"):
+        raise RuntimeError(f"请先配置环境变量 {var_name}（不要使用占位符）")
+    return value
+
+
 # --- 配置区（见面日期可以随时改这里）---
-FROM_EMAIL = "<YOUR_FROM_EMAIL>"
-TO_EMAIL = "<YOUR_TO_EMAIL>"
+FROM_EMAIL = read_required_env("FROM_EMAIL")
+TO_EMAIL = read_required_env("TO_EMAIL")
 ANNIVERSARY = date(2021, 12, 25)       # 纪念日
 NEXT_MEETING = date(2026, 3, 10)       # 下次见面日期，改这里
 
 # --- API Keys（从 GitHub Secrets 环境变量读取）---
-CLAUDE_KEY = os.environ["CLAUDE_KEY"]
-GMAIL_PASSWORD = os.environ["GMAIL_PASSWORD"]
+CLAUDE_KEY = read_required_env("CLAUDE_KEY")
+GMAIL_PASSWORD = read_required_env("GMAIL_PASSWORD")
 
 # WMO 天气代码 → 中文描述
 WMO_CODE = {

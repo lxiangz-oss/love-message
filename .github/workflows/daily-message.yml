@@ -27,4 +27,6 @@ jobs:
           QWEATHER_KEY: ${{ secrets.QWEATHER_KEY }}
           CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
         run: python send_message.py
