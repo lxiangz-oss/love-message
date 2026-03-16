@@ -19,7 +19,7 @@ def read_required_env(var_name):
 FROM_EMAIL = read_required_env("FROM_EMAIL")
 TO_EMAIL = read_required_env("TO_EMAIL")
 ANNIVERSARY = date(2021, 12, 25)       # 纪念日
-NEXT_MEETING = date(2026, 3, 10)       # 下次见面日期，改这里
+NEXT_MEETING = date(2026, 4, 11)       # 下次见面日期，改这里
 
 # --- API Keys（从 GitHub Secrets 环境变量读取）---
 CLAUDE_KEY = read_required_env("CLAUDE_KEY")
