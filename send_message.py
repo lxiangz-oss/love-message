@@ -139,11 +139,7 @@ def build_html(today, days_together, days_until_meeting, durham, boston, quote):
         </td>
         <td style="width: 1px; background: #f0f0f0; padding: 0;"></td>
         <td style="width: 50%; text-align: center; padding: 4px 8px;">
-          <p style="margin: 0; font-size: 12px; color: #aaa;">距离见面还有</p>
-          <p style="margin: 8px 0 4px; font-size: 40px; font-weight: bold; color: #d4526e; line-height: 1;">
-            {days_until_meeting}
-          </p>
-          <p style="margin: 0; font-size: 12px; color: #aaa;">天</p>
+          {'<p style="margin: 0; font-size: 12px; color: #aaa;">距离见面还有</p><p style="margin: 8px 0 4px; font-size: 40px; font-weight: bold; color: #d4526e; line-height: 1;">' + str(days_until_meeting) + '</p><p style="margin: 0; font-size: 12px; color: #aaa;">天</p>' if days_until_meeting > 0 else '<p style="margin: 20px 0; font-size: 28px; font-weight: bold; color: #d4526e;">见面啦 🎉</p>'}
         </td>
       </tr>
     </table>
